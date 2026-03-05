@@ -52,4 +52,4 @@ desktop.ini
 ### --- LOGS & TEMPORALES --- ###
 *.log
 *.tmp
-*.temp
+*.temp 
