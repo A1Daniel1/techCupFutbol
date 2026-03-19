@@ -1,6 +1,9 @@
-package edu.eci.dosw.tech_cup.model;
+package edu.eci.dosw.tech_cup;
 
-import edu.eci.dosw.tech_cup.enums.TypePlayer;
+import edu.eci.dosw.tech_cup.model.*;
+import edu.eci.dosw.tech_cup.enums.*;
+import edu.eci.dosw.tech_cup.exception.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

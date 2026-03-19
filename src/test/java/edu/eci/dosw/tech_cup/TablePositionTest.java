@@ -1,14 +1,14 @@
 package edu.eci.dosw.tech_cup;
 
-import edu.eci.dosw.tech_cup.model.*;
-import edu.eci.dosw.tech_cup.enums.*;
-import edu.eci.dosw.tech_cup.exception.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import edu.eci.dosw.tech_cup.model.TablePosition;
+import edu.eci.dosw.tech_cup.model.Team;
 
 @DisplayName("TablePosition Tests")
 class TablePositionTest {
