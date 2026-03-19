@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LineUp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.model</a> &gt; <span class="el_source">LineUp.java</span></div><h1>LineUp.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.model;
+
+import java.util.ArrayList;
+
+public class LineUp {
+
+    private ArrayList&lt;Player&gt; players;
+
+<span class="fc" id="L9">    public LineUp() {</span>
+<span class="fc" id="L10">        this.players = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L11">    }</span>
+
+    public void addPlayer(Player player) {
+<span class="fc bfc" id="L14" title="All 2 branches covered.">        if (player == null)</span>
+<span class="fc" id="L15">            throw new IllegalArgumentException(&quot;Player cannot be null&quot;);</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        if (players.size() &gt;= 11)</span>
+<span class="fc" id="L17">            throw new IllegalStateException(&quot;Lineup cannot have more than 11 players&quot;);</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        if (!player.isAvailable())</span>
+<span class="fc" id="L19">            throw new IllegalStateException(&quot;Player &quot; + player.getNickName() + &quot; is not available&quot;);</span>
+<span class="fc" id="L20">        players.add(player);</span>
+<span class="fc" id="L21">    }</span>
+
+    public boolean isComplete() {
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        return players.size() == 11;</span>
+    }
+
+<span class="fc" id="L27">    public ArrayList&lt;Player&gt; getPlayers()       { return players; }</span>
+<span class="fc" id="L28">    public void setPlayers(ArrayList&lt;Player&gt; p) { this.players = p; }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L32">        return &quot;LineUp{players=&quot; + players.size() + &quot;}&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

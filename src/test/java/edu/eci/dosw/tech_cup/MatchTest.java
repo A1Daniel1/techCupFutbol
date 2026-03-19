@@ -1,16 +1,18 @@
 package edu.eci.dosw.tech_cup;
 
-import edu.eci.dosw.tech_cup.model.*;
-import edu.eci.dosw.tech_cup.enums.*;
-import edu.eci.dosw.tech_cup.exception.*;
+import java.time.LocalTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import edu.eci.dosw.tech_cup.model.Match;
+import edu.eci.dosw.tech_cup.model.PenaltyCards;
+import edu.eci.dosw.tech_cup.model.Team;
 
 @DisplayName("Match Tests")
 class MatchTest {
@@ -135,10 +137,10 @@ class MatchTest {
     }
 
     @Test
-    @DisplayName("Should set attribute30 correctly")
-    void shouldSetAttribute30Correctly() {
-        match.setAttribute30(7);
-        assertEquals(7, match.getAttribute30());
+    @DisplayName("Should set extra time correctly")
+    void shouldSetExtraTimeCorrectly() {
+        match.setExtraTime(match.getExtraTime() + 7);
+        assertEquals(7, match.getExtraTime());
     }
 
     @Test
