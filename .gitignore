@@ -1,3 +1,4 @@
+### --- MAVEN (Wrapper y Basura) --- ###
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -7,49 +8,28 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-# https://maven.apache.org/wrapper/#usage-without-binary-jar
+# NO ignores mvnw ni .mvn/wrapper/maven-wrapper.properties
+# Pero SI el .jar del wrapper (se descarga solo)
 .mvn/wrapper/maven-wrapper.jar
 
-# Eclipse m2e generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-
-
-### --- MAVEN --- ###
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-### --- INTELLIJ IDEA (JetBrains) --- ###
+### --- IDEs (IntelliJ, VS Code, Eclipse) --- ###
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
-
-### --- VISUAL STUDIO CODE --- ###
 .vscode/
+.project
+.classpath
+.settings/
+.factorypath
 bin/
 obj/
-*.suo
-*.user
-*.sln.docstates
 
-### --- ARCHIVOS DE SISTEMA --- ###
+### --- SISTEMA Y LOGS --- ###
 .DS_Store
 Thumbs.db
 desktop.ini
-
-### --- LOGS & TEMPORALES --- ###
 *.log
 *.tmp
-*.temp 
+*.temp
