@@ -1,7 +1,7 @@
 package edu.eci.dosw.tech_cup.model;
 
-import edu.eci.dosw.tech_cup.enums.TypePlayer;
-import edu.eci.dosw.tech_cup.enums.TypeUser;
+import edu.eci.dosw.tech_cup.enum.TypePlayer;
+import edu.eci.dosw.tech_cup.enum.TypeUser;
 
 public abstract class Player extends User {
 
