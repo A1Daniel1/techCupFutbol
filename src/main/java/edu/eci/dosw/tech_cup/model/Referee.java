@@ -1,6 +1,6 @@
 package edu.eci.dosw.tech_cup.model;
 
-import edu.eci.dosw.tech_cup.enum.TypeUser;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
 
 public class Referee extends User {
 

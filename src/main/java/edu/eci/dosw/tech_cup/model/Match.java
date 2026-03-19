@@ -10,7 +10,7 @@ public class Match {
     private Team localTeam;
     private int goals;
     private int faults;
-    private int attribute30;
+    private int ExtraTime;
     private ArrayList<PenaltyCards> penaltyCards;
 
     public Match() {
@@ -25,7 +25,7 @@ public class Match {
         this.localTeam    = localTeam;
         this.goals        = 0;
         this.faults       = 0;
-        this.attribute30  = 0;
+        this.ExtraTime  = 0;
         this.penaltyCards = new ArrayList<>();
     }
 
@@ -57,8 +57,8 @@ public class Match {
     public int getFaults()                         { return faults; }
     public void setFaults(int faults)              { this.faults = faults; }
 
-    public int getAttribute30()                    { return attribute30; }
-    public void setAttribute30(int attribute30)    { this.attribute30 = attribute30; }
+    public int getExtraTime()                    { return ExtraTime; }
+    public void setExtraTime(int ExtraTime)    { this.ExtraTime = ExtraTime; }
 
     public ArrayList<PenaltyCards> getPenaltyCards()            { return penaltyCards; }
     public void setPenaltyCards(ArrayList<PenaltyCards> cards)  { this.penaltyCards = cards; }

@@ -1,6 +1,6 @@
 package edu.eci.dosw.tech_cup.model;
 
-import edu.eci.dosw.tech_cup.enum.TypePlayer;
+import edu.eci.dosw.tech_cup.enums.TypePlayer;
 
 public class StudentPlayer extends Player {
 
