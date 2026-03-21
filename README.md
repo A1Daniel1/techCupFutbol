@@ -118,3 +118,50 @@ Nota: en entornos con Java 25, JaCoCo puede presentar incompatibilidad de instru
 
 ### JaCoCo
 ![JaCoCo](src/main/resources/docs/images/image-1.png)
+
+## Parte 4 - Swagger (Documentar API)
+
+Se implemento documentacion automatica de API con Swagger/OpenAPI usando `springdoc-openapi`.
+
+### Cambios realizados
+
+- Dependencia agregada en `pom.xml`:
+	- `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0`
+- Configuracion OpenAPI agregada en:
+	- `src/main/java/edu/eci/dosw/tech_cup/config/OpenApiConfig.java`
+- Rutas de Swagger configuradas en:
+	- `src/main/resources/application.properties`
+	- `springdoc.api-docs.path=/api-docs`
+	- `springdoc.swagger-ui.path=/swagger-ui.html`
+- Anotaciones de documentacion agregadas a controladores:
+	- `UserController`
+	- `TeamController`
+	- `TournamentController`
+	- `MatchController`
+
+### Como ejecutar y probar Swagger
+
+1. Compila el proyecto:
+
+```bash
+mvn -q -DskipTests compile
+```
+
+2. Levanta la aplicacion:
+
+```bash
+mvn spring-boot:run
+```
+
+3. Abre Swagger UI en el navegador:
+
+- `http://localhost:8080/api/swagger-ui.html`
+
+4. Si quieres ver el JSON OpenAPI:
+
+- `http://localhost:8080/api/api-docs`
+
+### Verificacion realizada
+
+- Swagger UI responde con HTTP `302` (redireccion valida hacia la interfaz).
+- OpenAPI docs responde con HTTP `200`.
