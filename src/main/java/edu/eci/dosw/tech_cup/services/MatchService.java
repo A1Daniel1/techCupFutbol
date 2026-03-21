@@ -4,7 +4,9 @@ import edu.eci.dosw.tech_cup.exception.TechCupException;
 import edu.eci.dosw.tech_cup.model.LineUp;
 import edu.eci.dosw.tech_cup.model.Match;
 import edu.eci.dosw.tech_cup.model.PenaltyCards;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MatchService {
 
     public void registerGoal(Match match) {

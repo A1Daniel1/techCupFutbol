@@ -3,7 +3,9 @@ package edu.eci.dosw.tech_cup.services;
 import edu.eci.dosw.tech_cup.exception.TechCupException;
 import edu.eci.dosw.tech_cup.model.Player;
 import edu.eci.dosw.tech_cup.model.Team;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TeamService {
 
     public Team createTeam(String name) {

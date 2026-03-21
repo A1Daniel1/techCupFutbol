@@ -5,10 +5,12 @@ import edu.eci.dosw.tech_cup.model.Match;
 import edu.eci.dosw.tech_cup.model.Referee;
 import edu.eci.dosw.tech_cup.model.Team;
 import edu.eci.dosw.tech_cup.model.Tournament;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TournamentService {
 
     private final List<Tournament> tournaments = new ArrayList<>();
