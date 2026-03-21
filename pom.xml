@@ -54,6 +54,13 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- PostgreSQL (runtime) -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- Spring Boot Test Starter (JUnit 5, Mockito, etc) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

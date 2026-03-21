@@ -228,3 +228,27 @@ curl -X GET http://localhost:8080/api/users
 - Archivo `logs/techcup.log`
 
 Veras trazas tipo `API IN`, `API OUT` y `API ERROR` para cada solicitud.
+
+## Laboratorio 8 - Paso 4 (Seleccion de entidades para base de datos)
+
+En este laboratorio iniciamos el trabajo orientado a persistencia y manejo de base de datos. Para el paso 4 se solicita definir al menos 3 entidades con las que se realizara la practica inicial de modelado y operaciones de datos.
+
+### Entidades seleccionadas
+
+- **Usuario**
+- **Team**
+- **Matches**
+
+### Justificacion de la seleccion
+
+Estas tres entidades representan el nucleo funcional del sistema y permiten practicar los conceptos principales de persistencia:
+
+- La entidad **Usuario** permite trabajar datos de identidad, roles y administracion de informacion personal.
+- La entidad **Team** permite modelar la estructura de equipos y sus relaciones con jugadores.
+- La entidad **Matches** permite registrar eventos del torneo y relacionar equipos, resultados y estadisticas.
+
+Con esta base se busca comprender de forma progresiva la gestion de base de datos dentro del proyecto antes de extender el modelo a mas entidades.
+
+### Alcance de esta fase
+
+En esta etapa **no se implementan cambios de codigo**. El objetivo es dejar documentada la planeacion de entidades que se usaran para las siguientes actividades del laboratorio.
