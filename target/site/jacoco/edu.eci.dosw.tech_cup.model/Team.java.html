@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Team.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.model</a> &gt; <span class="el_source">Team.java</span></div><h1>Team.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.model;
+
+import java.util.ArrayList;
+
+public class Team {
+
+    private String name;
+    private ArrayList&lt;Player&gt; players;
+    private Player captain;
+    private int matches;
+    private int fairPlay;
+
+<span class="nc" id="L13">    public Team() {</span>
+<span class="nc" id="L14">        this.players = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L15">    }</span>
+
+<span class="fc" id="L17">    public Team(String name) {</span>
+<span class="fc" id="L18">        this.name     = name;</span>
+<span class="fc" id="L19">        this.players  = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L20">        this.matches  = 0;</span>
+<span class="fc" id="L21">        this.fairPlay = 0;</span>
+<span class="fc" id="L22">    }</span>
+
+    public void addPlayer(Player player) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (player == null) throw new IllegalArgumentException(&quot;Player cannot be null&quot;);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (players.size() &gt;= 20) throw new IllegalStateException(&quot;Team roster is full (max 20 players)&quot;);</span>
+<span class="nc" id="L27">        players.add(player);</span>
+<span class="nc" id="L28">    }</span>
+
+    public boolean removePlayer(Player player) {
+<span class="nc" id="L31">        return players.remove(player);</span>
+    }
+
+    public void setCaptain(Player player) {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (!players.contains(player))</span>
+<span class="nc" id="L36">            throw new IllegalArgumentException(&quot;Captain must be a member of the team&quot;);</span>
+<span class="nc" id="L37">        this.captain = player;</span>
+<span class="nc" id="L38">    }</span>
+
+<span class="fc" id="L40">    public String getName()                     { return name; }</span>
+<span class="nc" id="L41">    public void setName(String name)            { this.name = name; }</span>
+
+<span class="fc" id="L43">    public ArrayList&lt;Player&gt; getPlayers()       { return players; }</span>
+<span class="nc" id="L44">    public void setPlayers(ArrayList&lt;Player&gt; p) { this.players = p; }</span>
+
+<span class="fc" id="L46">    public Player getCaptain()                  { return captain; }</span>
+
+<span class="fc" id="L48">    public int getMatches()                     { return matches; }</span>
+<span class="nc" id="L49">    public void setMatches(int matches)         { this.matches = matches; }</span>
+
+<span class="fc" id="L51">    public int getFairPlay()                    { return fairPlay; }</span>
+<span class="nc" id="L52">    public void setFairPlay(int fairPlay)       { this.fairPlay = fairPlay; }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L56">        return &quot;Team{name='&quot; + name + &quot;', players=&quot; + players.size()</span>
+               + &quot;, matches=&quot; + matches + &quot;, fairPlay=&quot; + fairPlay + &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

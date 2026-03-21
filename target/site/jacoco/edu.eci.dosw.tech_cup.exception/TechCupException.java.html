@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TechCupException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.exception</a> &gt; <span class="el_source">TechCupException.java</span></div><h1>TechCupException.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.exception;
+
+public class TechCupException extends RuntimeException {
+
+    public static final String TOURNAMENT_NULL         = &quot;Tournament cannot be null&quot;;
+    public static final String TEAM_NULL               = &quot;Team cannot be null&quot;;
+    public static final String TEAM_NAME_EMPTY         = &quot;Team name cannot be null or empty&quot;;
+    public static final String PLAYER_NULL             = &quot;Player cannot be null&quot;;
+    public static final String PLAYER_DUPLICATE        = &quot;Player already belongs to this team&quot;;
+    public static final String CAPTAIN_NULL            = &quot;Captain cannot be null&quot;;
+    public static final String MATCH_NULL              = &quot;Match cannot be null&quot;;
+    public static final String LINEUP_NULL             = &quot;LineUp cannot be null&quot;;
+    public static final String LINEUP_INCOMPLETE       = &quot;LineUp must have exactly 11 players&quot;;
+    public static final String REFEREE_NULL            = &quot;Referee cannot be null&quot;;
+    public static final String TEAM_MIN_PLAYERS        = &quot;Team must have at least 7 players to register&quot;;
+    public static final String PENALTY_CARDS_NULL      = &quot;PenaltyCards cannot be null&quot;;
+
+    public TechCupException(String message) {
+<span class="fc" id="L19">        super(message);</span>
+<span class="fc" id="L20">    }</span>
+
+    public TechCupException(String message, Throwable cause) {
+<span class="nc" id="L23">        super(message, cause);</span>
+<span class="nc" id="L24">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
