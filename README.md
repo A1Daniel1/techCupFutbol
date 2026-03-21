@@ -1,3 +1,15 @@
+# TechCup Backend
+
+## integrantes
+
+* DanieL Ahumada
+* Roger Duran
+* Camilo Torres
+* Camilo León
+* Juan Neira
+
+---
+
 Preguntas sobre la estructura de paquetes en Spring Boot
 
 1. Controller:
