@@ -1,7 +1,6 @@
 package edu.eci.dosw.tech_cup.entities;
 
 import jakarta.persistence.*;
-import edu.eci.dosw.tech_cup.enums.TypeUser;
 
 @Entity
 @Table(name = "users")
@@ -21,13 +20,31 @@ public class UserEntity {
     private int age;
 
     @Column(nullable = false)
-    private TypeUser type;
-
-    @Column(nullable = false)
     private String password;
 
     @Column
     private String academicProgram;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserTypeEntity role;
+
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private TournamentEntity tournament;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String name, String email, int age, UserTypeEntity role, String password,
+            String academicProgram) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.role = role;
+        this.password = password;
+        this.academicProgram = academicProgram;
+    }
 
     public Long getId() {
         return id;
@@ -61,12 +78,12 @@ public class UserEntity {
         this.age = age;
     }
 
-    public TypeUser getType() {
-        return type;
+    public UserTypeEntity getRole() {
+        return role;
     }
 
-    public void setType(TypeUser type) {
-        this.type = type;
+    public void setRole(UserTypeEntity role) {
+        this.role = role;
     }
 
     public String getPassword() {

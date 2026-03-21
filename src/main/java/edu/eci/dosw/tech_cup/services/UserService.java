@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import edu.eci.dosw.tech_cup.dto.User;
 import edu.eci.dosw.tech_cup.entities.UserEntity;
+import edu.eci.dosw.tech_cup.entities.UserTypeEntity;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
+import edu.eci.dosw.tech_cup.repositories.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserTypeRepository userTypeRepository;
 
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
@@ -73,7 +78,7 @@ public class UserService {
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());
         entity.setAge(user.getAge());
-        entity.setType(user.getRole());
+        entity.setRole(resolveUserRole(user.getRole()));
         entity.setPassword(password);
         entity.setAcademicProgram(academicProgram);
     }
@@ -84,8 +89,21 @@ public class UserService {
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
         dto.setAge(entity.getAge());
-        dto.setRole(entity.getType());
+        if (entity.getRole() != null && entity.getRole().getName() != null) {
+            dto.setRole(TypeUser.valueOf(entity.getRole().getName()));
+        }
         return dto;
+    }
+
+    private UserTypeEntity resolveUserRole(TypeUser role) {
+        String roleName = role.name();
+        UserTypeEntity existingRole = userTypeRepository.findByName(roleName).orElse(null);
+        if (existingRole != null) {
+            return existingRole;
+        }
+        UserTypeEntity newRole = new UserTypeEntity();
+        newRole.setName(roleName);
+        return userTypeRepository.save(newRole);
     }
 
 }
