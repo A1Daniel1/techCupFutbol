@@ -142,3 +142,54 @@ mvn spring-boot:run
 
 - Swagger UI responde con HTTP `302` (redireccion valida hacia la interfaz).
 - OpenAPI docs responde con HTTP `200`.
+
+## Parte 5 - Logger (Trazabilidad de API)
+
+Se implemento un logger transversal para registrar la ejecucion de endpoints sin modificar la logica de negocio.
+
+### Cambios realizados
+
+- Dependencia AOP agregada en `pom.xml`:
+	- `org.springframework.boot:spring-boot-starter-aop`
+- Aspecto de logging creado en:
+	- `src/main/java/edu/eci/dosw/tech_cup/config/ApiLoggingAspect.java`
+	- Registra entrada y salida de operaciones REST con:
+		- Metodo HTTP
+		- URI
+		- Operacion ejecutada
+		- Duracion en ms
+	- Registra errores con stacktrace cuando una operacion falla
+- Manejo de excepciones reforzado en:
+	- `src/main/java/edu/eci/dosw/tech_cup/controller/GlobalExceptionHandler.java`
+	- Se deja traza `WARN` al responder errores 400
+- Configuracion de salida de logs en:
+	- `src/main/resources/application.properties`
+	- `logging.file.name=logs/techcup.log`
+	- Patrones personalizados para consola y archivo
+
+### Como ejecutar y verificar el logger
+
+1. Compila el proyecto:
+
+```bash
+mvn -q -DskipTests compile
+```
+
+2. Ejecuta la aplicacion:
+
+```bash
+mvn spring-boot:run
+```
+
+3. Consume cualquier endpoint, por ejemplo:
+
+```bash
+curl -X GET http://localhost:8080/api/users
+```
+
+4. Revisa los logs:
+
+- Consola de Spring Boot
+- Archivo `logs/techcup.log`
+
+Veras trazas tipo `API IN`, `API OUT` y `API ERROR` para cada solicitud.
