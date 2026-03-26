@@ -41,7 +41,7 @@ public class TournamentController {
     }
 
     @PostMapping("/{tournamentIndex}/teams")
-    @Operation(summary = "Registrar equipo en torneo", description = "Registra un equipo en el torneo por indice")
+    @Operation(summary = "Registrar equipo en torneo",  description = "Registra un equipo en el torneo por indice")
     public Tournament registerTeam(@PathVariable int tournamentIndex, @RequestBody Team team) {
         Tournament tournament = getTournamentByIndex(tournamentIndex);
         tournamentService.registerTeam(tournament, team);
