@@ -49,39 +49,22 @@ public class PlayerController {
     @GetMapping("/{teamId}/players")
     @Operation(summary = "Obtener jugadores de equipo", description = "Obtiene la lista de jugadores del equipo indicado")
     public List<PlayerResponse> getPlayers(@PathVariable int teamId) {
-        Team team = getTeamOrThrow(teamId);
         List<PlayerResponse> response = new ArrayList<>();
-        for (Player player : team.getPlayers()) {
-            response.add(new PlayerResponse(player.getId(), player.getName()));
-        }
         return response;
     }
 
-    @DeleteMapping("/{teamId}/players/{playerId}")
+    @DeleteMapping("/{playerId}")
     @Operation(summary = "Eliminar jugador de equipo", description = "Elimina un jugador del equipo indicado")
     public TeamResponse removePlayer(@PathVariable int teamId, @PathVariable int playerId) {
         Team team = getTeamOrThrow(teamId);
-        Player player = team.getPlayers().stream()
-                .filter(p -> p.getId() == playerId)
-                .findFirst()
-                .orElseThrow(() -> new TechCupException("Player not found with id: " + playerId));
-        team.getPlayers().remove(player);
         return new TeamResponse(teamId, team);
- 
+        
     }
 
-    @PutMapping("/{teamId}/players/{playerId}")
+    @PutMapping("/{playerId}")
     @Operation(summary = "Actualizar jugador de equipo", description = "Actualiza los datos de un jugador del equipo indicado")
     public TeamResponse updatePlayer(@PathVariable int teamId, @PathVariable int playerId, @RequestBody Player updatedPlayer) {
         Team team = getTeamOrThrow(teamId);
-        Player player = team.getPlayers().stream()
-                .filter(p -> p.getId() == playerId)
-                .findFirst()
-                .orElseThrow(() -> new TechCupException("Player not found with id: " + playerId));
-        player.setName(updatedPlayer.getName());
-        player.setPosition(updatedPlayer.getPosition());
-        player.setAvailable(updatedPlayer.isAvailable());
-        player.setTypePlayer(updatedPlayer.getTypePlayer());
         return new TeamResponse(teamId, team);
     }
 
