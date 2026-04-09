@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.entities</a> &gt; <span class="el_source">UserEntity.java</span></div><h1>UserEntity.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.entities;
+
+import jakarta.persistence.*;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
+
+@Entity
+@Table(name = &quot;users&quot;)
+<span class="fc" id="L8">public class UserEntity {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private int age;
+
+    @Column(nullable = false)
+    private TypeUser type;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column
+    private String academicProgram;
+
+    public Long getId() {
+<span class="nc" id="L33">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L37">        this.id = id;</span>
+<span class="nc" id="L38">    }</span>
+
+    public String getName() {
+<span class="nc" id="L41">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L45">        this.name = name;</span>
+<span class="nc" id="L46">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L49">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L53">        this.email = email;</span>
+<span class="nc" id="L54">    }</span>
+
+    public int getAge() {
+<span class="nc" id="L57">        return age;</span>
+    }
+
+    public void setAge(int age) {
+<span class="nc" id="L61">        this.age = age;</span>
+<span class="nc" id="L62">    }</span>
+
+    public TypeUser getType() {
+<span class="nc" id="L65">        return type;</span>
+    }
+
+    public void setType(TypeUser type) {
+<span class="nc" id="L69">        this.type = type;</span>
+<span class="nc" id="L70">    }</span>
+
+    public String getPassword() {
+<span class="nc" id="L73">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="nc" id="L77">        this.password = password;</span>
+<span class="nc" id="L78">    }</span>
+
+    public String getAcademicProgram() {
+<span class="nc" id="L81">        return academicProgram;</span>
+    }
+
+    public void setAcademicProgram(String academicProgram) {
+<span class="nc" id="L85">        this.academicProgram = academicProgram;</span>
+<span class="nc" id="L86">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
