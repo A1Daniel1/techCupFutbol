@@ -25,39 +25,36 @@ public class MatchController {
     @PostMapping("/goal")
     @Operation(summary = "Registrar gol", description = "Incrementa la cantidad de goles del partido")
     public Match registerGoal(@RequestBody Match match) {
-        matchService.registerGoal(match);
-        return match;
+        return matchService.registerGoal(match);
     }
 
     @PostMapping("/fault")
     @Operation(summary = "Registrar falta", description = "Incrementa la cantidad de faltas del partido")
     public Match registerFault(@RequestBody Match match) {
-        matchService.registerFault(match);
-        return match;
+        return matchService.registerFault(match);
     }
 
     @PostMapping("/yellow-card")
     @Operation(summary = "Registrar tarjeta amarilla", description = "Suma una tarjeta amarilla en el registro de tarjetas")
     public PenaltyCards issueYellowCard(@RequestBody MatchCardsRequest request) {
-        matchService.issueYellowCard(request.match(), request.cards());
-        return request.cards();
+        return matchService.issueYellowCard(request.match(), request.cards());
     }
 
     @PostMapping("/red-card")
     @Operation(summary = "Registrar tarjeta roja", description = "Suma una tarjeta roja en el registro de tarjetas")
     public PenaltyCards issueRedCard(@RequestBody MatchCardsRequest request) {
-        matchService.issueRedCard(request.match(), request.cards());
-        return request.cards();
+        return matchService.issueRedCard(request.match(), request.cards());
     }
 
     @PostMapping("/lineup")
     @Operation(summary = "Registrar alineacion", description = "Valida y registra la alineacion para un partido")
     public Match registerLineUp(@RequestBody MatchLineUpRequest request) {
-        matchService.registerLineUp(request.match(), request.lineUp());
-        return request.match();
+        return matchService.registerLineUp(request.match(), request.lineUp());
     }
 
-    public record MatchCardsRequest(Match match, PenaltyCards cards) {}
+    public record MatchCardsRequest(Match match, PenaltyCards cards) {
+    }
 
-    public record MatchLineUpRequest(Match match, LineUp lineUp) {}
+    public record MatchLineUpRequest(Match match, LineUp lineUp) {
+    }
 }
