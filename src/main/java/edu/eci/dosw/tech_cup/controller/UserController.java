@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Users", description = "Endpoints para consulta de usuarios")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -74,6 +74,7 @@ public class UserController {
             int age,
             TypeUser role,
             String password,
-            String academicProgram) {}
+            String academicProgram) {
+    }
 
 }
