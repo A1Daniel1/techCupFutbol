@@ -1,21 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.services</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.services;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.services</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import edu.eci.dosw.tech_cup.dto.User;
+import edu.eci.dosw.tech_cup.entities.UserEntity;
+import edu.eci.dosw.tech_cup.mappers.UserMapper;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-<span class="fc" id="L11">public class UserService {</span>
+public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+<span class="fc" id="L17">    public UserService(UserRepository userRepository, UserMapper userMapper) {</span>
+<span class="fc" id="L18">        this.userRepository = userRepository;</span>
+<span class="fc" id="L19">        this.userMapper = userMapper;</span>
+<span class="fc" id="L20">    }</span>
 
     public List&lt;User&gt; getUsers() {
-<span class="nc" id="L17">        return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L23">        List&lt;User&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        for (UserEntity entity : userRepository.findAll()) {</span>
+<span class="nc" id="L25">            users.add(userMapper.toDto(entity));</span>
+<span class="nc" id="L26">        }</span>
+<span class="nc" id="L27">        return users;</span>
     }
+
+    public User getUserById(Long id) {
+<span class="nc" id="L31">        UserEntity entity = userRepository.findById(id)</span>
+<span class="nc" id="L32">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;User not found&quot;));</span>
+<span class="nc" id="L33">        return userMapper.toDto(entity);</span>
+    }
+
+    public User createUser(User user, String password, String academicProgram) {
+<span class="nc" id="L37">        validateUserData(user, password);</span>
+<span class="nc" id="L38">        UserEntity entity = userMapper.toEntity(user, password, academicProgram);</span>
+<span class="nc" id="L39">        UserEntity saved = userRepository.save(entity);</span>
+<span class="nc" id="L40">        return userMapper.toDto(saved);</span>
+    }
+
+    public User updateUser(Long id, User user, String password, String academicProgram) {
+<span class="nc" id="L44">        validateUserData(user, password);</span>
+<span class="nc" id="L45">        UserEntity entity = userRepository.findById(id)</span>
+<span class="nc" id="L46">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;User not found&quot;));</span>
+<span class="nc" id="L47">        userMapper.apply(entity, user, password, academicProgram);</span>
+<span class="nc" id="L48">        UserEntity saved = userRepository.save(entity);</span>
+<span class="nc" id="L49">        return userMapper.toDto(saved);</span>
+    }
+
+    public void deleteUser(Long id) {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (!userRepository.existsById(id)) {</span>
+<span class="nc" id="L54">            throw new IllegalArgumentException(&quot;User not found&quot;);</span>
+        }
+<span class="nc" id="L56">        userRepository.deleteById(id);</span>
+<span class="nc" id="L57">    }</span>
+
+    private void validateUserData(User user, String password) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L61">            throw new IllegalArgumentException(&quot;User payload is required&quot;);</span>
+        }
+<span class="nc bnc" id="L63" title="All 4 branches missed.">        if (user.getName() == null || user.getName().isBlank()) {</span>
+<span class="nc" id="L64">            throw new IllegalArgumentException(&quot;User name is required&quot;);</span>
+        }
+<span class="nc bnc" id="L66" title="All 4 branches missed.">        if (user.getEmail() == null || user.getEmail().isBlank()) {</span>
+<span class="nc" id="L67">            throw new IllegalArgumentException(&quot;User email is required&quot;);</span>
+        }
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (user.getAge() &lt;= 0) {</span>
+<span class="nc" id="L70">            throw new IllegalArgumentException(&quot;User age must be greater than zero&quot;);</span>
+        }
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (user.getRole() == null) {</span>
+<span class="nc" id="L73">            throw new IllegalArgumentException(&quot;User role is required&quot;);</span>
+        }
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        if (password == null || password.isBlank()) {</span>
+<span class="nc" id="L76">            throw new IllegalArgumentException(&quot;User password is required&quot;);</span>
+        }
+<span class="nc" id="L78">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
