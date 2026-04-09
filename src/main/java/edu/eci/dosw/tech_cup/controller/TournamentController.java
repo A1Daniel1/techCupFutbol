@@ -36,35 +36,24 @@ public class TournamentController {
     @PostMapping
     @Operation(summary = "Crear torneo", description = "Registra un nuevo torneo")
     public Tournament createTournament(@RequestBody Tournament tournament) {
-        tournamentService.createTournament(tournament);
-        return tournament;
+        return tournamentService.createTournament(tournament);
     }
 
     @PostMapping("/{tournamentIndex}/teams")
     @Operation(summary = "Registrar equipo en torneo", description = "Registra un equipo en el torneo por indice")
     public Tournament registerTeam(@PathVariable int tournamentIndex, @RequestBody Team team) {
-        Tournament tournament = getTournamentByIndex(tournamentIndex);
-        tournamentService.registerTeam(tournament, team);
-        return tournament;
+        return tournamentService.registerTeam(tournamentIndex, team);
     }
 
     @PostMapping("/{tournamentIndex}/matches")
     @Operation(summary = "Programar partido", description = "Programa un partido dentro del torneo por indice")
     public Tournament scheduleMatch(@PathVariable int tournamentIndex, @RequestBody Match match) {
-        Tournament tournament = getTournamentByIndex(tournamentIndex);
-        tournamentService.scheduleMatch(tournament, match);
-        return tournament;
+        return tournamentService.scheduleMatch(tournamentIndex, match);
     }
 
     @PostMapping("/{tournamentIndex}/referee")
     @Operation(summary = "Asignar arbitro", description = "Asigna arbitro al torneo por indice")
     public Tournament assignReferee(@PathVariable int tournamentIndex, @RequestBody Referee referee) {
-        Tournament tournament = getTournamentByIndex(tournamentIndex);
-        tournamentService.assignReferee(tournament, referee);
-        return tournament;
-    }
-
-    private Tournament getTournamentByIndex(int index) {
-        return tournamentService.getAllTournaments().get(index);
+        return tournamentService.assignReferee(tournamentIndex, referee);
     }
 }
