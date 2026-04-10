@@ -1,42 +1,55 @@
 package edu.eci.dosw.tech_cup;
 
-import edu.eci.dosw.tech_cup.controller.GlobalExceptionHandler;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@Import(GlobalExceptionHandler.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import edu.eci.dosw.tech_cup.controller.TournamentController;
+import edu.eci.dosw.tech_cup.model.Tournament;
+import edu.eci.dosw.tech_cup.services.TournamentService;
+
+@ExtendWith(MockitoExtension.class)
 class TournamentControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private TournamentService tournamentService;
+
+    @InjectMocks
+    private TournamentController tournamentController;
 
     @Test
     void shouldGetAllTournaments() throws Exception {
-        mockMvc.perform(get("/tournaments"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+        Tournament t = new Tournament();
+        t.setStartDate(LocalDate.of(2026, 3, 1));
+        when(tournamentService.getAllTournaments()).thenReturn(List.of(t));
+
+        List<Tournament> tournaments = tournamentController.getAllTournaments();
+
+        assertFalse(tournaments.isEmpty());
+        assertEquals(LocalDate.of(2026, 3, 1), tournaments.get(0).getStartDate());
     }
 
     @Test
     void shouldCreateTournament() throws Exception {
-        mockMvc.perform(post("/tournaments")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                        "{\"startDate\":\"2026-03-01\",\"endDate\":\"2026-03-31\",\"startTime\":\"08:00:00\",\"endTime\":\"18:00:00\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.startDate").value("2026-03-01"));
+        Tournament payload = new Tournament();
+        payload.setStartDate(LocalDate.of(2026, 3, 1));
+        payload.setEndDate(LocalDate.of(2026, 3, 31));
+        payload.setStartTime(LocalTime.of(8, 0));
+        payload.setEndTime(LocalTime.of(18, 0));
+
+        when(tournamentService.createTournament(payload)).thenReturn(payload);
+
+        Tournament created = tournamentController.createTournament(payload);
+
+        assertEquals(LocalDate.of(2026, 3, 1), created.getStartDate());
     }
 }

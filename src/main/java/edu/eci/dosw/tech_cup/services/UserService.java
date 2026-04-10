@@ -1,21 +1,29 @@
 package edu.eci.dosw.tech_cup.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
 import edu.eci.dosw.tech_cup.dto.User;
+import edu.eci.dosw.tech_cup.entities.RoleEntity;
 import edu.eci.dosw.tech_cup.entities.UserEntity;
 import edu.eci.dosw.tech_cup.mappers.UserMapper;
+import edu.eci.dosw.tech_cup.repositories.RoleRepository;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.userMapper = userMapper;
     }
 
@@ -35,7 +43,11 @@ public class UserService {
 
     public User createUser(User user, String password, String academicProgram) {
         validateUserData(user, password);
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new IllegalArgumentException("User email already exists");
+        }
         UserEntity entity = userMapper.toEntity(user, password, academicProgram);
+        entity.setRoles(resolveRoles(user));
         UserEntity saved = userRepository.save(entity);
         return userMapper.toDto(saved);
     }
@@ -44,7 +56,13 @@ public class UserService {
         validateUserData(user, password);
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        String currentEmail = entity.getEmail();
+        if ((currentEmail == null || !currentEmail.equalsIgnoreCase(user.getEmail()))
+            && userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new IllegalArgumentException("User email already exists");
+        }
         userMapper.apply(entity, user, password, academicProgram);
+        entity.setRoles(resolveRoles(user));
         UserEntity saved = userRepository.save(entity);
         return userMapper.toDto(saved);
     }
@@ -75,6 +93,22 @@ public class UserService {
         if (password == null || password.isBlank()) {
             throw new IllegalArgumentException("User password is required");
         }
+    }
+
+    private Set<RoleEntity> resolveRoles(User user) {
+        Set<RoleEntity> roles = new HashSet<>();
+        if (user.getRole() == null) {
+            return roles;
+        }
+        String roleName = user.getRole().name();
+        RoleEntity role = roleRepository.findByName(roleName)
+                .orElseGet(() -> {
+                    RoleEntity newRole = new RoleEntity();
+                    newRole.setName(roleName);
+                    return roleRepository.save(newRole);
+                });
+        roles.add(role);
+        return roles;
     }
 
 }
