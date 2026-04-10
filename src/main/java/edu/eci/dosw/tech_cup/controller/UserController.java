@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Users", description = "Endpoints para consulta de usuarios")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -42,8 +43,10 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario")
-    public User createUser(@RequestBody UserRequest request) {
+    public User createUser(@RequestParam UserRequest request) {
+        System.out.println("ENTRE");
         return userService.createUser(toDto(request), request.password(), request.academicProgram());
+
     }
 
     @PutMapping("/{id}")
@@ -74,6 +77,7 @@ public class UserController {
             int age,
             TypeUser role,
             String password,
-            String academicProgram) {}
+            String academicProgram) {
+    }
 
 }

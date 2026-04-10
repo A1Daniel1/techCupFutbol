@@ -1,4 +1,4 @@
-### --- MAVEN (Wrapper y Basura) --- ###
+### --- MAVEN --- ###
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -7,12 +7,17 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
-.mvn/timing.properties
-# NO ignores mvnw ni .mvn/wrapper/maven-wrapper.properties
-# Pero SI el .jar del wrapper (se descarga solo)
-.mvn/wrapper/maven-wrapper.jar
 
-### --- IDEs (IntelliJ, VS Code, Eclipse) --- ###
+# Maven local cache (nunca se sube)
+.mvn/timing.properties
+
+# ✅ Maven Wrapper (NO ignorar)
+# mvnw
+# mvnw.cmd
+# .mvn/wrapper/maven-wrapper.jar
+# .mvn/wrapper/maven-wrapper.properties
+
+### --- IDEs --- ###
 .idea/
 *.iws
 *.iml
