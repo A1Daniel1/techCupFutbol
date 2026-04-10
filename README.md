@@ -470,3 +470,6 @@ como vemos cumple con el valor 200 y ok
  vemos que se genero una contraseña ![alt text](image-3.png).
  La ponemos en nuestro postman ![alt text](image-4.png), y le damos permisos para que acceda
  vemos ahora que si accedio ![alt text](image-5.png).
+ ya añadimos al aplication.properties el nuevo sistema de seguridad y ahora 
+ hacemos de nuevo la configuracion ![alt text](image-6.png) y probamos que si de 200 de nuevo 
+ ![alt text](image-7.png), lo cual ya nos sirve.
