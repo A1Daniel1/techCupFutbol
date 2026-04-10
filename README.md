@@ -393,7 +393,7 @@ Se implementó siguiendo una arquitectura de capas:
 
 La conexión se configuró en el archivo application.properties apuntando a una instancia de MongoDB que tenemos en docker:
 
-![imagen-mongodb-docker](./src/main/resources/docs/images/mdb-docker.png)
+![imagen-mongodb-docker](./src/main/resources/docs/images/lab8/mdb-docker.png)
 
 
 El aplication properties lo tenemos de la siguiente manera:
@@ -414,7 +414,7 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 + Body: ``form-data`` con los campos ``archivo`` (File) y ``referenciaExterna`` (String).
 + Resultado esperado: Recibir un objeto JSON con el ``id`` generado por MongoDB y los metadatos de la imagen.
 
-![imagen-mongodb-prueba1](./src/main/resources/docs/images/mdb-1.png)
+![imagen-mongodb-prueba1](./src/main/resources/docs/images/lab8/mdb-1.png)
 
 ### Listar imágenes:
 
@@ -423,7 +423,7 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 
 + Resultado esperado: Un arreglo JSON con todos los documentos de imágenes almacenados.
 
-![imagen-mongodb-prueba2](./src/main/resources/docs/images/mdb-2.png)
+![imagen-mongodb-prueba2](./src/main/resources/docs/images/lab8/mdb-2.png)
 
 
 ### Consultar imagen por ID:
@@ -433,7 +433,7 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 
 + Resultado esperado: Retorno de los datos binarios de la imagen con el tipo de contenido correcto (ej. image/png).
 
-![imagen-mongodb-prueba3](./src/main/resources/docs/images/mdb-3.png)
+![imagen-mongodb-prueba3](./src/main/resources/docs/images/lab8/mdb-3.png)
 
 
 ### Listar por referencia externa:
@@ -443,7 +443,7 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 
 + Uso: Útil para obtener todas las imágenes asociadas a un torneo o equipo específico.
 
-![imagen-mongodb-prueba4](./src/main/resources/docs/images/mdb-4.png)
+![imagen-mongodb-prueba4](./src/main/resources/docs/images/lab8/mdb-4.png)
 
 
 ### Eliminar una imagen:
@@ -453,4 +453,4 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 
 + Resultado esperado: Confirmación de la eliminación del registro en MongoDB.
 
-![imagen-mongodb-prueba5](./src/main/resources/docs/images/mdb-5.png)
+![imagen-mongodb-prueba5](./src/main/resources/docs/images/lab8/mdb-5.png)
