@@ -126,10 +126,10 @@ Nota: en entornos con Java 25, JaCoCo puede presentar incompatibilidad de instru
 ## Evidencias de calidad
 
 ### SonarQube
-![SonarQube](src/main/resources/docs/images/image.png)
+![SonarQube](src/main/resources/docs/images/sonarQube.png)
 
 ### JaCoCo
-![JaCoCo](src/main/resources/docs/images/image-1.png)
+![JaCoCo](src/main/resources/docs/images/jacoco.png)
 
 ## Parte 4 - Swagger (Documentar API)
 
@@ -253,10 +253,121 @@ Con esta base se busca comprender de forma progresiva la gestion de base de dato
 
 En esta etapa **no se implementan cambios de codigo**. El objetivo es dejar documentada la planeacion de entidades que se usaran para las siguientes actividades del laboratorio.
 
+## Entrega final - Persistencia (Laboratorio)
+
+Esta seccion resume los requisitos de entrega solicitados y la evidencia asociada dentro del proyecto.
+
+### Checklist de cumplimiento
+
+- [x] Minimo 3 entidades JPA.
+- [x] Minimo 3 repositorios.
+- [x] Minimo 1 relacion entre entidades.
+- [x] Conexion funcional a PostgreSQL (configurada en el proyecto).
+- [x] Pruebas con H2.
+- [x] Integracion de persistencia con controladores y servicios.
+
+### Entidades JPA implementadas
+
+- `UserEntity`
+- `TeamEntity`
+- `MatchEntity`
+- `TournamentEntity`
+
+Ubicacion: [src/main/java/edu/eci/dosw/tech_cup/entities](src/main/java/edu/eci/dosw/tech_cup/entities)
+
+### Repositorios implementados
+
+- `UserRepository`
+- `TeamRepository`
+- `MatchRepository`
+- `TournamentRepository`
+
+Ubicacion: [src/main/java/edu/eci/dosw/tech_cup/repositories](src/main/java/edu/eci/dosw/tech_cup/repositories)
+
+### Relacion entre entidades (JPA)
+
+Se implemento la relacion `TournamentEntity` 1:N `MatchEntity`:
+
+- `TournamentEntity` contiene `@OneToMany(mappedBy = "tournament")`.
+- `MatchEntity` contiene `@ManyToOne` con `@JoinColumn(name = "tournament_id")`.
+
+Referencias:
+
+- [src/main/java/edu/eci/dosw/tech_cup/entities/TournamentEntity.java](src/main/java/edu/eci/dosw/tech_cup/entities/TournamentEntity.java)
+- [src/main/java/edu/eci/dosw/tech_cup/entities/MatchEntity.java](src/main/java/edu/eci/dosw/tech_cup/entities/MatchEntity.java)
+
+### Conexion a PostgreSQL
+
+La aplicacion esta configurada para PostgreSQL en:
+
+- [src/main/resources/application.properties](src/main/resources/application.properties)
+
+Parametros clave:
+
+- `spring.datasource.url=jdbc:postgresql://localhost:5432/TechCup`
+- `spring.datasource.driver-class-name=org.postgresql.Driver`
+- `spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect`
+
+### Pruebas con H2
+
+La configuracion de pruebas usa H2 con perfil `test`:
+
+- [src/test/resources/application-test.properties](src/test/resources/application-test.properties)
+- [src/test/java/edu/eci/dosw/tech_cup/RepositoryJpaTest.java](src/test/java/edu/eci/dosw/tech_cup/RepositoryJpaTest.java)
+- [src/test/java/edu/eci/dosw/tech_cup/TeamControllerTest.java](src/test/java/edu/eci/dosw/tech_cup/TeamControllerTest.java)
+- [src/test/java/edu/eci/dosw/tech_cup/TournamentControllerTest.java](src/test/java/edu/eci/dosw/tech_cup/TournamentControllerTest.java)
+- [src/test/java/edu/eci/dosw/tech_cup/MatchControllerApiTest.java](src/test/java/edu/eci/dosw/tech_cup/MatchControllerApiTest.java)
+
+Resultado de ejecucion de pruebas en entorno de desarrollo:
+
+- `156 passed, 0 failed`.
+
+### Integracion de persistencia con servicios y controladores
+
+La persistencia esta integrada en la capa de servicios y expuesta por controladores REST.
+
+Servicios:
+
+- `UserService`
+- `TeamService`
+- `MatchService`
+- `TournamentService`
+
+Controladores:
+
+- `UserController`
+- `TeamController`
+- `MatchController`
+- `TournamentController`
+
+### Enlaces de entrega
+
+- Enlace del repositorio principal: https://github.com/A1Daniel1/techCupFutbol
+- Enlace del repositorio del microservicio: PENDIENTE (agregar URL del microservicio).
+
+### Evidencias solicitadas en README
+
+- Evidencia de tablas creadas en PostgreSQL:
+
+![Tablas creadas en PostgreSQL](src/main/resources/docs/images/TablesPostgress.png)
+- Evidencia de pruebas ejecutadas con H2:
+
+![Configuracion H2](src/main/resources/docs/images/ConfiguracionH2.png)
+![Resultados de pruebas en panel de tests](src/main/resources/docs/images/testPanelResults.png)
+
+### Evidencia de URLs locales de la API
+
+![URL base local](src/main/resources/docs/images/FirsURL.png)
+![Endpoint de equipos](src/main/resources/docs/images/teamsURL.png)
+
 ---
 # Parte B - microServicio de imagenes
 
 Este microservicio es un proyecto independiente encargado de la gestión de imágenes del sistema (jugadores, torneos, etc.) utilizando una base de datos NoSQL
+
+
+**link del microservicio:** https://github.com/A1Daniel1/techCupMicroService
+
 
 ---
 
@@ -285,7 +396,7 @@ La conexión se configuró en el archivo application.properties apuntando a una 
 ![imagen-mongodb-docker](./src/main/resources/docs/images/mdb-docker.png)
 
 
-El aplication properties lo tenemos de la siguiente manera: 
+El aplication properties lo tenemos de la siguiente manera:
 
 ```
 spring.data.mongodb.uri=mongodb://localhost:27017/lab8images
@@ -296,7 +407,6 @@ server.port=8081
 ### Pruebas de Funcionamiento (Evidencias)
 
 Para validar el microservicio, se realizaron las siguientes pruebas utilizando Postman
-
 
 ### Subir una imagen:
 
