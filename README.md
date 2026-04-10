@@ -252,3 +252,95 @@ Con esta base se busca comprender de forma progresiva la gestion de base de dato
 ### Alcance de esta fase
 
 En esta etapa **no se implementan cambios de codigo**. El objetivo es dejar documentada la planeacion de entidades que se usaran para las siguientes actividades del laboratorio.
+
+---
+# Parte B - microServicio de imagenes
+
+Este microservicio es un proyecto independiente encargado de la gestión de imágenes del sistema (jugadores, torneos, etc.) utilizando una base de datos NoSQL
+
+---
+
+## Estructura del microservicio
+
+Se implementó siguiendo una arquitectura de capas:
+
+
+* **Documento (ImagenDocument):** Define la estructura de los datos en MongoDB, incluyendo nombre, tipo de contenido, datos binarios (byte[]), fecha de carga y una referencia externa.
+
+
+* **Repositorio (ImagenRepository):** Interfaz que extiende MongoRepository para operaciones CRUD y búsquedas por referencia externa.
+
+
+* **Servicio (ImagenService):** Contiene la lógica para procesar archivos MultipartFile y convertirlos en documentos persistibles.
+
+
+* **Controlador (ImagenController):** Expone los endpoints REST para la gestión de archivos.
+
+---
+
+## Configuración de Persistencia (MongoDB)
+
+La conexión se configuró en el archivo application.properties apuntando a una instancia de MongoDB que tenemos en docker:
+
+![imagen-mongodb-docker](./src/main/resources/docs/images/mdb-docker.png)
+
+
+El aplication properties lo tenemos de la siguiente manera: 
+
+```
+spring.data.mongodb.uri=mongodb://localhost:27017/lab8images
+server.port=8081
+```
+---
+
+### Pruebas de Funcionamiento (Evidencias)
+
+Para validar el microservicio, se realizaron las siguientes pruebas utilizando Postman
+
+
+### Subir una imagen:
+
++ Endpoint: ``POST /imagenes``
++ Body: ``form-data`` con los campos ``archivo`` (File) y ``referenciaExterna`` (String).
++ Resultado esperado: Recibir un objeto JSON con el ``id`` generado por MongoDB y los metadatos de la imagen.
+
+![imagen-mongodb-prueba1](./src/main/resources/docs/images/mdb-1.png)
+
+### Listar imágenes:
+
+
++ Endpoint: ``GET /imagenes``
+
++ Resultado esperado: Un arreglo JSON con todos los documentos de imágenes almacenados.
+
+![imagen-mongodb-prueba2](./src/main/resources/docs/images/mdb-2.png)
+
+
+### Consultar imagen por ID:
+
+
++ Endpoint: GET /imagenes/{id}
+
++ Resultado esperado: Retorno de los datos binarios de la imagen con el tipo de contenido correcto (ej. image/png).
+
+![imagen-mongodb-prueba3](./src/main/resources/docs/images/mdb-3.png)
+
+
+### Listar por referencia externa:
+
+
++ Endpoint: GET /imagenes/referencia/{referenciaExterna}
+
++ Uso: Útil para obtener todas las imágenes asociadas a un torneo o equipo específico.
+
+![imagen-mongodb-prueba4](./src/main/resources/docs/images/mdb-4.png)
+
+
+### Eliminar una imagen:
+
+
++ Endpoint: DELETE /imagenes/{id}
+
++ Resultado esperado: Confirmación de la eliminación del registro en MongoDB.
+
+![imagen-mongodb-prueba5](./src/main/resources/docs/images/mdb-5.png)
