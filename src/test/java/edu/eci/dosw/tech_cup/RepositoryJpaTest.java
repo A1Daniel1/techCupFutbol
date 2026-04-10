@@ -1,96 +1,191 @@
 package edu.eci.dosw.tech_cup;
 
-import edu.eci.dosw.tech_cup.entities.MatchEntity;
-import edu.eci.dosw.tech_cup.entities.TournamentEntity;
-import edu.eci.dosw.tech_cup.entities.UserEntity;
-import edu.eci.dosw.tech_cup.enums.TypeUser;
-import edu.eci.dosw.tech_cup.repositories.MatchRepository;
-import edu.eci.dosw.tech_cup.repositories.TournamentRepository;
-import edu.eci.dosw.tech_cup.repositories.UserRepository;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@DataJpaTest
-@ActiveProfiles("test")
+import edu.eci.dosw.tech_cup.dto.User;
+import edu.eci.dosw.tech_cup.entities.RoleEntity;
+import edu.eci.dosw.tech_cup.entities.UserEntity;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
+import edu.eci.dosw.tech_cup.mappers.UserMapper;
+import edu.eci.dosw.tech_cup.repositories.RoleRepository;
+import edu.eci.dosw.tech_cup.repositories.UserRepository;
+import edu.eci.dosw.tech_cup.services.UserService;
+
+@ExtendWith(MockitoExtension.class)
 class RepositoryJpaTest {
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
-    private TournamentRepository tournamentRepository;
+    @Mock
+    private RoleRepository roleRepository;
 
-    @Autowired
-    private MatchRepository matchRepository;
+    @Mock
+    private UserMapper userMapper;
+
+    @InjectMocks
+    private UserService userService;
 
     @Test
-    @DisplayName("Debe guardar un usuario correctamente")
-    void shouldSaveUser() {
-        UserEntity user = buildUser("Ana Rodriguez", "ana@eci.edu.co");
+    void shouldGetUsersFromRepository() {
+        UserEntity entity = new UserEntity();
+        entity.setId(1L);
+        User dto = buildUserDto("Ana", "ana@eci.edu.co");
 
-        UserEntity saved = userRepository.save(user);
+        when(userRepository.findAll()).thenReturn(List.of(entity));
+        when(userMapper.toDto(entity)).thenReturn(dto);
 
-        assertNotNull(saved.getId());
-        assertEquals("Ana Rodriguez", saved.getName());
-        assertEquals("ana@eci.edu.co", saved.getEmail());
+        List<User> users = userService.getUsers();
+
+        assertEquals(1, users.size());
+        assertEquals("Ana", users.get(0).getName());
     }
 
     @Test
-    @DisplayName("Debe consultar usuarios por nombre ignorando mayusculas")
-    void shouldFindUsersByNameIgnoringCase() {
-        userRepository.save(buildUser("Carlos Perez", "carlos@eci.edu.co"));
-        userRepository.save(buildUser("carlota Mejia", "carlota@eci.edu.co"));
+    void shouldGetUserById() {
+        UserEntity entity = new UserEntity();
+        entity.setId(10L);
+        User dto = buildUserDto("Carlos", "carlos@eci.edu.co");
 
-        List<UserEntity> found = userRepository.findByNameContainingIgnoreCase("carl");
+        when(userRepository.findById(10L)).thenReturn(Optional.of(entity));
+        when(userMapper.toDto(entity)).thenReturn(dto);
 
-        assertEquals(2, found.size());
+        User user = userService.getUserById(10L);
+
+        assertEquals("Carlos", user.getName());
     }
 
     @Test
-    @DisplayName("Debe persistir relacion torneo-partido")
-    void shouldPersistTournamentMatchRelationship() {
-        TournamentEntity tournament = new TournamentEntity();
-        tournament.setPayload("{\"name\":\"Copa ECI\"}");
-        TournamentEntity savedTournament = tournamentRepository.save(tournament);
+    void shouldCreateUser() {
+        User input = buildUserDto("Laura", "laura@eci.edu.co");
+        UserEntity entity = new UserEntity();
+        UserEntity saved = new UserEntity();
+        RoleEntity role = new RoleEntity();
+        role.setName("GEST");
+        saved.setId(3L);
+        User savedDto = buildUserDto("Laura", "laura@eci.edu.co");
+        savedDto.setId(3);
 
-        MatchEntity match = new MatchEntity();
-        match.setPayload("{\"goals\":2}");
-        match.setTournament(savedTournament);
-        MatchEntity savedMatch = matchRepository.save(match);
+        when(userMapper.toEntity(input, "secret", "Sistemas")).thenReturn(entity);
+        when(roleRepository.findByName("GEST")).thenReturn(Optional.of(role));
+        when(userRepository.save(entity)).thenReturn(saved);
+        when(userMapper.toDto(saved)).thenReturn(savedDto);
 
-        Optional<MatchEntity> reloadedMatch = matchRepository.findById(savedMatch.getId());
+        User created = userService.createUser(input, "secret", "Sistemas");
 
-        assertTrue(reloadedMatch.isPresent());
-        assertNotNull(reloadedMatch.get().getTournament());
-        assertEquals(savedTournament.getId(), reloadedMatch.get().getTournament().getId());
+        assertEquals(3, created.getId());
     }
 
     @Test
-    @DisplayName("Debe eliminar usuario por id")
-    void shouldDeleteUserById() {
-        UserEntity saved = userRepository.save(buildUser("Laura Diaz", "laura@eci.edu.co"));
+    void shouldUpdateUser() {
+        User input = buildUserDto("Luis", "luis@eci.edu.co");
+        UserEntity existing = new UserEntity();
+        RoleEntity role = new RoleEntity();
+        role.setName("GEST");
+        existing.setId(7L);
+        existing.setEmail("luis@eci.edu.co");
 
-        userRepository.deleteById(saved.getId());
+        when(userRepository.findById(7L)).thenReturn(Optional.of(existing));
+        when(roleRepository.findByName("GEST")).thenReturn(Optional.of(role));
+        when(userRepository.save(existing)).thenReturn(existing);
+        when(userMapper.toDto(existing)).thenReturn(input);
 
-        assertFalse(userRepository.findById(saved.getId()).isPresent());
+        User updated = userService.updateUser(7L, input, "secret", "Industrial");
+
+        verify(userMapper).apply(existing, input, "secret", "Industrial");
+        assertEquals("Luis", updated.getName());
     }
 
-    private UserEntity buildUser(String name, String email) {
-        UserEntity user = new UserEntity();
+    @Test
+    void shouldDeleteExistingUser() {
+        when(userRepository.existsById(4L)).thenReturn(true);
+
+        userService.deleteUser(4L);
+
+        verify(userRepository).deleteById(4L);
+    }
+
+    @Test
+    void shouldFailWhenDeletingMissingUser() {
+        when(userRepository.existsById(99L)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> userService.deleteUser(99L));
+    }
+
+    @Test
+    void shouldFailWhenGetUserByIdDoesNotExist() {
+        when(userRepository.findById(404L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> userService.getUserById(404L));
+    }
+
+    @Test
+    void shouldFailWhenUpdateUserDoesNotExist() {
+        User input = buildUserDto("NoExiste", "no@eci.edu.co");
+        when(userRepository.findById(404L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> userService.updateUser(404L, input, "secret", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserWithoutName() {
+        User input = buildUserDto("", "ana@eci.edu.co");
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(input, "secret", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserWithoutEmail() {
+        User input = buildUserDto("Ana", "");
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(input, "secret", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserWithoutRole() {
+        User input = buildUserDto("Ana", "ana@eci.edu.co");
+        input.setRole(null);
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(input, "secret", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserWithoutPassword() {
+        User input = buildUserDto("Ana", "ana@eci.edu.co");
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(input, "", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserWithInvalidAge() {
+        User input = buildUserDto("Ana", "ana@eci.edu.co");
+        input.setAge(0);
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(input, "secret", "Sistemas"));
+    }
+
+    @Test
+    void shouldFailWhenCreateUserPayloadIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(null, "secret", "Sistemas"));
+    }
+
+    private User buildUserDto(String name, String email) {
+        User user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setAge(21);
-        user.setType(TypeUser.PLAYER);
-        user.setPassword("secret");
-        user.setAcademicProgram("Ingenieria de Sistemas");
+        user.setRole(TypeUser.GEST);
         return user;
     }
 }
