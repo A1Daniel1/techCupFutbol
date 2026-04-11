@@ -454,3 +454,22 @@ Para validar el microservicio, se realizaron las siguientes pruebas utilizando P
 + Resultado esperado: Confirmación de la eliminación del registro en MongoDB.
 
 ![imagen-mongodb-prueba5](./src/main/resources/docs/images/lab8/mdb-5.png)
+
+## Laboratorio9 
+# Parte1 ejecucion y creacion de el postman 
+1 y 2 . como vemos ![alt text](./src/main/resources/docs/images/image.png)
+ya se configuro postman y la creacion de la coleccion users, ejecutamos nuestro proyecto y le dimos a la peticion.
+![alt text](./src/main/resources/docs/images/image-1.png) 
+como vemos cumple con el valor 200 y ok 
+
+# Parte 2 
+ # Dependencias de el spring boot security 
+ # Ejecutamos aplicacion de nuevo
+ ![alt text](./src/main/resources/docs/images/image-2.png)
+ vemos que nos dice que no esta autorizado
+ vemos que se genero una contraseña ![alt text](./src/main/resources/docs/images/image-3.png).
+ La ponemos en nuestro postman ![alt text](./src/main/resources/docs/images/image-4.png), y le damos permisos para que acceda
+ vemos ahora que si accedio ![alt text](./src/main/resources/docs/images/image-5.png).
+ ya añadimos al aplication.properties el nuevo sistema de seguridad y ahora 
+ hacemos de nuevo la configuracion ![alt text](./src/main/resources/docs/images/image-6.png) y probamos que si de 200 de nuevo 
+ ![alt text](./src/main/resources/docs/images/image-7.png), lo cual ya nos sirve.
