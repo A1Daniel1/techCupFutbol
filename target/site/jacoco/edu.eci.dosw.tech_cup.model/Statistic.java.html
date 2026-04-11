@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Statistic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.model</a> &gt; <span class="el_source">Statistic.java</span></div><h1>Statistic.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.model;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Statistic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.model</a> &gt; <span class="el_source">Statistic.java</span></div><h1>Statistic.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.model;
 
 import java.util.ArrayList;
 
@@ -8,34 +8,34 @@ public class Statistic {
     private ArrayList&lt;Team&gt;   teams;
     private ArrayList&lt;Match&gt;  matches;
 
-<span class="nc" id="L11">    public Statistic() {</span>
-<span class="nc" id="L12">        this.players = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L13">        this.teams   = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L14">        this.matches = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L15">    }</span>
+<span class="fc" id="L11">    public Statistic() {</span>
+<span class="fc" id="L12">        this.players = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L13">        this.teams   = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L14">        this.matches = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L15">    }</span>
 
     public Team getBestFairPlayTeam() {
-<span class="nc" id="L18">        return teams.stream()</span>
-<span class="nc" id="L19">                .max((t1, t2) -&gt; Integer.compare(t1.getFairPlay(), t2.getFairPlay()))</span>
-<span class="nc" id="L20">                .orElse(null);</span>
+<span class="fc" id="L18">        return teams.stream()</span>
+<span class="fc" id="L19">                .max((t1, t2) -&gt; Integer.compare(t1.getFairPlay(), t2.getFairPlay()))</span>
+<span class="fc" id="L20">                .orElse(null);</span>
     }
 
-<span class="nc" id="L23">    public int getTotalMatches() { return matches.size(); }</span>
+<span class="fc" id="L23">    public int getTotalMatches() { return matches.size(); }</span>
 
-<span class="nc" id="L25">    public ArrayList&lt;Player&gt; getPlayers()       { return players; }</span>
-<span class="nc" id="L26">    public void setPlayers(ArrayList&lt;Player&gt; p) { this.players = p; }</span>
+<span class="fc" id="L25">    public ArrayList&lt;Player&gt; getPlayers()       { return players; }</span>
+<span class="fc" id="L26">    public void setPlayers(ArrayList&lt;Player&gt; p) { this.players = p; }</span>
 
-<span class="nc" id="L28">    public ArrayList&lt;Team&gt; getTeams()           { return teams; }</span>
-<span class="nc" id="L29">    public void setTeams(ArrayList&lt;Team&gt; t)     { this.teams = t; }</span>
+<span class="fc" id="L28">    public ArrayList&lt;Team&gt; getTeams()           { return teams; }</span>
+<span class="fc" id="L29">    public void setTeams(ArrayList&lt;Team&gt; t)     { this.teams = t; }</span>
 
-<span class="nc" id="L31">    public ArrayList&lt;Match&gt; getMatches()        { return matches; }</span>
-<span class="nc" id="L32">    public void setMatches(ArrayList&lt;Match&gt; m)  { this.matches = m; }</span>
+<span class="fc" id="L31">    public ArrayList&lt;Match&gt; getMatches()        { return matches; }</span>
+<span class="fc" id="L32">    public void setMatches(ArrayList&lt;Match&gt; m)  { this.matches = m; }</span>
 
     @Override
     public String toString() {
-<span class="nc" id="L36">        return &quot;Statistic{players=&quot; + players.size()</span>
-<span class="nc" id="L37">               + &quot;, teams=&quot; + teams.size()</span>
-<span class="nc" id="L38">               + &quot;, matches=&quot; + matches.size() + &quot;}&quot;;</span>
+<span class="fc" id="L36">        return &quot;Statistic{players=&quot; + players.size()</span>
+<span class="fc" id="L37">               + &quot;, teams=&quot; + teams.size()</span>
+<span class="fc" id="L38">               + &quot;, matches=&quot; + matches.size() + &quot;}&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

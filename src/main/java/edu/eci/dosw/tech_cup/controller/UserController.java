@@ -1,10 +1,5 @@
 package edu.eci.dosw.tech_cup.controller;
 
-import edu.eci.dosw.tech_cup.services.UserService;
-import edu.eci.dosw.tech_cup.dto.User;
-import edu.eci.dosw.tech_cup.enums.TypeUser;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +12,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.eci.dosw.tech_cup.dto.User;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
+import edu.eci.dosw.tech_cup.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Users", description = "Endpoints para consulta de usuarios")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -44,6 +45,7 @@ public class UserController {
     @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario")
     public User createUser(@RequestBody UserRequest request) {
         return userService.createUser(toDto(request), request.password(), request.academicProgram());
+
     }
 
     @PutMapping("/{id}")
@@ -74,6 +76,7 @@ public class UserController {
             int age,
             TypeUser role,
             String password,
-            String academicProgram) {}
+            String academicProgram) {
+    }
 
 }

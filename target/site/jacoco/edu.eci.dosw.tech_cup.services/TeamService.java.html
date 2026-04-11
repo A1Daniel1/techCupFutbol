@@ -1,31 +1,103 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeamService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.services</a> &gt; <span class="el_source">TeamService.java</span></div><h1>TeamService.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.services;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeamService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">techCupFutbol</a> &gt; <a href="index.source.html" class="el_package">edu.eci.dosw.tech_cup.services</a> &gt; <span class="el_source">TeamService.java</span></div><h1>TeamService.java</h1><pre class="source lang-java linenums">package edu.eci.dosw.tech_cup.services;
 
 import edu.eci.dosw.tech_cup.exception.TechCupException;
+import edu.eci.dosw.tech_cup.entities.TeamEntity;
+import edu.eci.dosw.tech_cup.mappers.TeamMapper;
 import edu.eci.dosw.tech_cup.model.Player;
 import edu.eci.dosw.tech_cup.model.Team;
+import edu.eci.dosw.tech_cup.repositories.TeamRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
-<span class="fc" id="L9">public class TeamService {</span>
+public class TeamService {
 
-    public Team createTeam(String name) {
-<span class="pc bpc" id="L12" title="1 of 4 branches missed.">        if (name == null || name.isBlank())</span>
-<span class="fc" id="L13">            throw new TechCupException(TechCupException.TEAM_NAME_EMPTY);</span>
-<span class="fc" id="L14">        return new Team(name);</span>
+    private final TeamRepository teamRepository;
+    private final TeamMapper teamMapper;
+<span class="fc" id="L23">    private final AtomicLong apiIdSequence = new AtomicLong(1);</span>
+<span class="fc" id="L24">    private final Map&lt;Long, Long&gt; apiToDbIds = new ConcurrentHashMap&lt;&gt;();</span>
+
+<span class="fc" id="L26">    public TeamService(TeamRepository teamRepository, TeamMapper teamMapper) {</span>
+<span class="fc" id="L27">        this.teamRepository = teamRepository;</span>
+<span class="fc" id="L28">        this.teamMapper = teamMapper;</span>
+<span class="fc" id="L29">    }</span>
+
+    public List&lt;PersistedTeam&gt; getTeams() {
+<span class="nc" id="L32">        List&lt;PersistedTeam&gt; teams = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        for (TeamEntity entity : teamRepository.findAll(Sort.by(Sort.Direction.ASC, &quot;id&quot;))) {</span>
+<span class="nc" id="L34">            Long apiId = resolveApiId(entity.getId());</span>
+<span class="nc" id="L35">            teams.add(new PersistedTeam(apiId, teamMapper.toModel(entity)));</span>
+<span class="nc" id="L36">        }</span>
+<span class="nc" id="L37">        return teams;</span>
     }
 
-    public void addPlayerToTeam(Team team, Player player) {
-<span class="nc bnc" id="L18" title="All 2 branches missed.">        if (team   == null) throw new TechCupException(TechCupException.TEAM_NULL);</span>
-<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (player == null) throw new TechCupException(TechCupException.PLAYER_NULL);</span>
-<span class="nc bnc" id="L20" title="All 2 branches missed.">        if (team.getPlayers().contains(player))</span>
-<span class="nc" id="L21">            throw new TechCupException(TechCupException.PLAYER_DUPLICATE);</span>
-<span class="nc" id="L22">        team.addPlayer(player);</span>
-<span class="nc" id="L23">    }</span>
+    public PersistedTeam createTeam(String name) {
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        if (name == null || name.isBlank())</span>
+<span class="fc" id="L42">            throw new TechCupException(TechCupException.TEAM_NAME_EMPTY);</span>
+<span class="fc" id="L43">        TeamEntity saved = teamRepository.save(teamMapper.toEntity(new Team(name)));</span>
+<span class="fc" id="L44">        Long apiId = apiIdSequence.getAndIncrement();</span>
+<span class="fc" id="L45">        apiToDbIds.put(apiId, saved.getId());</span>
+<span class="fc" id="L46">        return new PersistedTeam(apiId, teamMapper.toModel(saved));</span>
+    }
 
-    public void setCaptain(Team team, Player captain) {
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (team    == null) throw new TechCupException(TechCupException.TEAM_NULL);</span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (captain == null) throw new TechCupException(TechCupException.CAPTAIN_NULL);</span>
-<span class="nc" id="L28">        team.setCaptain(captain);</span>
-<span class="nc" id="L29">    }</span>
+    public PersistedTeam addPlayerToTeam(long teamId, Player player) {
+<span class="nc" id="L50">        TeamEntity entity = getEntityOrThrow(teamId);</span>
+<span class="nc" id="L51">        Team team = teamMapper.toModel(entity);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (team == null)</span>
+<span class="nc" id="L53">            throw new TechCupException(TechCupException.TEAM_NULL);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (player == null)</span>
+<span class="nc" id="L55">            throw new TechCupException(TechCupException.PLAYER_NULL);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (team.getPlayers().contains(player))</span>
+<span class="nc" id="L57">            throw new TechCupException(TechCupException.PLAYER_DUPLICATE);</span>
+<span class="nc" id="L58">        team.addPlayer(player);</span>
+<span class="nc" id="L59">        teamMapper.updateEntity(entity, team);</span>
+<span class="nc" id="L60">        TeamEntity saved = teamRepository.save(entity);</span>
+<span class="nc" id="L61">        return new PersistedTeam(saved.getId(), teamMapper.toModel(saved));</span>
+    }
+
+    public PersistedTeam setCaptain(long teamId, int playerIndex) {
+<span class="nc" id="L65">        TeamEntity entity = getEntityOrThrow(teamId);</span>
+<span class="nc" id="L66">        Team team = teamMapper.toModel(entity);</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (playerIndex &lt; 0 || playerIndex &gt;= team.getPlayers().size()) {</span>
+<span class="nc" id="L68">            throw new IllegalArgumentException(&quot;Captain index out of bounds&quot;);</span>
+        }
+<span class="nc" id="L70">        Player captain = team.getPlayers().get(playerIndex);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (captain == null)</span>
+<span class="nc" id="L72">            throw new TechCupException(TechCupException.CAPTAIN_NULL);</span>
+<span class="nc" id="L73">        team.setCaptain(captain);</span>
+<span class="nc" id="L74">        teamMapper.updateEntity(entity, team);</span>
+<span class="nc" id="L75">        TeamEntity saved = teamRepository.save(entity);</span>
+<span class="nc" id="L76">        return new PersistedTeam(saved.getId(), teamMapper.toModel(saved));</span>
+    }
+
+    private TeamEntity getEntityOrThrow(long teamId) {
+<span class="nc" id="L80">        Long dbId = apiToDbIds.get(teamId);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (dbId == null) {</span>
+<span class="nc" id="L82">            dbId = teamId;</span>
+        }
+<span class="nc" id="L84">        return teamRepository.findById(dbId)</span>
+<span class="nc" id="L85">                .orElseThrow(() -&gt; new TechCupException(TechCupException.TEAM_NULL));</span>
+    }
+
+    private Long resolveApiId(Long dbId) {
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        for (Map.Entry&lt;Long, Long&gt; entry : apiToDbIds.entrySet()) {</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (entry.getValue().equals(dbId)) {</span>
+<span class="nc" id="L91">                return entry.getKey();</span>
+            }
+<span class="nc" id="L93">        }</span>
+<span class="nc" id="L94">        Long apiId = apiIdSequence.getAndIncrement();</span>
+<span class="nc" id="L95">        apiToDbIds.put(apiId, dbId);</span>
+<span class="nc" id="L96">        return apiId;</span>
+    }
+
+<span class="fc" id="L99">    public record PersistedTeam(Long id, Team team) {</span>
+    }
 }
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

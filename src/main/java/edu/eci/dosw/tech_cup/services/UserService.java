@@ -2,22 +2,35 @@ package edu.eci.dosw.tech_cup.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import edu.eci.dosw.tech_cup.dto.User;
 import edu.eci.dosw.tech_cup.entities.UserEntity;
+import edu.eci.dosw.tech_cup.mappers.UserMapper;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
         for (UserEntity entity : userRepository.findAll()) {
-            users.add(toDto(entity));
+            users.add(userMapper.toDto(entity));
         }
         return users;
     }
@@ -25,22 +38,23 @@ public class UserService {
     public User getUserById(Long id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        return toDto(entity);
+        return userMapper.toDto(entity);
     }
 
     public User createUser(User user, String password, String academicProgram) {
-        UserEntity entity = new UserEntity();
-        applyUserData(entity, user, password, academicProgram);
+        validateUserData(user, password);
+        UserEntity entity = userMapper.toEntity(user, passwordEncoder.encode(password), academicProgram);
         UserEntity saved = userRepository.save(entity);
-        return toDto(saved);
+        return userMapper.toDto(saved);
     }
 
     public User updateUser(Long id, User user, String password, String academicProgram) {
+        validateUserData(user, password);
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        applyUserData(entity, user, password, academicProgram);
+        userMapper.apply(entity, user, passwordEncoder.encode(password), academicProgram);
         UserEntity saved = userRepository.save(entity);
-        return toDto(saved);
+        return userMapper.toDto(saved);
     }
 
     public void deleteUser(Long id) {
@@ -50,7 +64,25 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    private void applyUserData(UserEntity entity, User user, String password, String academicProgram) {
+
+    public UserDetails loadUserByEmail(String email) {
+        /*
+         * Objetivo de loadUserByEmail: obtener el usuario por correo para autenticacion.
+         * UserDetails: representa credenciales y autoridades que Spring Security valida.
+         * SimpleGrantedAuthority: representa el rol/permiso concreto del usuario.
+         */
+        UserEntity user = userRepository.findByEmailIgnoreCase(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getType().name())));
+    }
+
+    private void validateUserData(User user, String password) {
         if (user == null) {
             throw new IllegalArgumentException("User payload is required");
         }
@@ -69,23 +101,5 @@ public class UserService {
         if (password == null || password.isBlank()) {
             throw new IllegalArgumentException("User password is required");
         }
-
-        entity.setName(user.getName());
-        entity.setEmail(user.getEmail());
-        entity.setAge(user.getAge());
-        entity.setType(user.getRole());
-        entity.setPassword(password);
-        entity.setAcademicProgram(academicProgram);
     }
-
-    private User toDto(UserEntity entity) {
-        User dto = new User();
-        dto.setId(entity.getId().intValue());
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setAge(entity.getAge());
-        dto.setRole(entity.getType());
-        return dto;
-    }
-
 }
