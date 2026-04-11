@@ -1,4 +1,4 @@
-name: Pipeline Continuos Integration laboratorio 9
+name: Pipeline Continuos Integration laboratorio 9 (pair programmed con Juan Camilo Torres)
 
 on:
   pull_request:
