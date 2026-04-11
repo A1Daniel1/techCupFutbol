@@ -2,21 +2,29 @@ package edu.eci.dosw.tech_cup.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import edu.eci.dosw.tech_cup.dto.User;
 import edu.eci.dosw.tech_cup.entities.UserEntity;
 import edu.eci.dosw.tech_cup.mappers.UserMapper;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getUsers() {
@@ -35,7 +43,7 @@ public class UserService {
 
     public User createUser(User user, String password, String academicProgram) {
         validateUserData(user, password);
-        UserEntity entity = userMapper.toEntity(user, password, academicProgram);
+        UserEntity entity = userMapper.toEntity(user, passwordEncoder.encode(password), academicProgram);
         UserEntity saved = userRepository.save(entity);
         return userMapper.toDto(saved);
     }
@@ -44,7 +52,7 @@ public class UserService {
         validateUserData(user, password);
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        userMapper.apply(entity, user, password, academicProgram);
+        userMapper.apply(entity, user, passwordEncoder.encode(password), academicProgram);
         UserEntity saved = userRepository.save(entity);
         return userMapper.toDto(saved);
     }
@@ -54,6 +62,24 @@ public class UserService {
             throw new IllegalArgumentException("User not found");
         }
         userRepository.deleteById(id);
+    }
+
+
+    public UserDetails loadUserByEmail(String email) {
+        /*
+         * Objetivo de loadUserByEmail: obtener el usuario por correo para autenticacion.
+         * UserDetails: representa credenciales y autoridades que Spring Security valida.
+         * SimpleGrantedAuthority: representa el rol/permiso concreto del usuario.
+         */
+        UserEntity user = userRepository.findByEmailIgnoreCase(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getType().name())));
     }
 
     private void validateUserData(User user, String password) {
@@ -76,5 +102,4 @@ public class UserService {
             throw new IllegalArgumentException("User password is required");
         }
     }
-
 }

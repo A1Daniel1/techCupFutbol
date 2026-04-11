@@ -1,10 +1,5 @@
 package edu.eci.dosw.tech_cup.controller;
 
-import edu.eci.dosw.tech_cup.services.UserService;
-import edu.eci.dosw.tech_cup.dto.User;
-import edu.eci.dosw.tech_cup.enums.TypeUser;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import edu.eci.dosw.tech_cup.dto.User;
+import edu.eci.dosw.tech_cup.enums.TypeUser;
+import edu.eci.dosw.tech_cup.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/users")
@@ -43,8 +43,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario")
-    public User createUser(@RequestParam UserRequest request) {
-        System.out.println("ENTRE");
+    public User createUser(@RequestBody UserRequest request) {
         return userService.createUser(toDto(request), request.password(), request.academicProgram());
 
     }
