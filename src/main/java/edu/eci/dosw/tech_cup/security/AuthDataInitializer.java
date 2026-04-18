@@ -20,7 +20,7 @@ public class AuthDataInitializer {
     @Profile("!test")
     public CommandLineRunner seedAuthUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            UserEntity existing = userRepository.findByEmailIgnoreCase(DEFAULT_EMAIL);
+            UserEntity existing = userRepository.findByEmailIgnoreCase(DEFAULT_EMAIL).orElse(null);
 
             if (existing == null) {
                 UserEntity user = new UserEntity();

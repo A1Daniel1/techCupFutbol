@@ -14,6 +14,8 @@ import edu.eci.dosw.tech_cup.mappers.UserMapper;
 import edu.eci.dosw.tech_cup.repositories.RoleRepository;
 import edu.eci.dosw.tech_cup.repositories.UserRepository;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Service
 public class UserService {
 
@@ -109,6 +111,16 @@ public class UserService {
                 });
         roles.add(role);
         return roles;
+    }
+
+    public UserDetails loadUserByEmail(String email) {
+        UserEntity user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getType().name())
+                .build();
     }
 
 }
