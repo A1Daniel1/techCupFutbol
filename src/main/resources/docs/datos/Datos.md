@@ -2,6 +2,6 @@
 
 ![xd](./../images/diagramaER.png)
 
-# Diagrama de contendores 
+# Diagrama de contenedores 
 
-![diagrama](./src/main/resources/docs/images/Diagrama de contenedores.png)
+![alt text](./../images/Diagrama-de-contenedores.png)
