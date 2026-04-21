@@ -45,7 +45,7 @@ public class UserEntity {
         )
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @Column
